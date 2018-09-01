@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{#自己用的依赖#}
+{% block own-rely %}
+    {#静态资源目录需要重新加载#}
+    {% load static %}
+    {#其它依赖#}
+    <link href="{% static "/lzh/css/cntmsg.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{#标题#}
+{% block title %}账户资料{% endblock %}
+
+{#内容部分#}
+{% block content %}
+    <div class="container">
+        <div class="formbox">
+            <h3>账户资料</h3>
+            <div class="formdiv">
+                <h5>用户名：</h5>
+                <input id="username" value="{{ username }}" placeholder="新用户名" class="form-control" type="text">
+                <br>
+                <h5>密码：</h5>
+                <input id="password" value="{{ password }}" placeholder="新的密码" class="form-control" type="text">
+                <br>
+                <button class="btn btn-block btn-lg btn-primary" onclick="updateMsg();">保存</button>
+            </div>
+        </div>
+        <div class="imgbox">
+            <div class="imgdiv">
+                <img src="{% static "/userpic/" %}{{ userId }}.jpg">
+                <input type="file" name="file" id="file_upload">
+                <button class="btn btn-block btn-lg btn-primary" onclick="uploadHead();">上传头像</button>
+                <button class="btn btn-block btn-lg btn-danger" onclick="deleteThisUser();">删除账户</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        {# 更新账户信息 #}
+
+        function updateMsg() {
+            $.ajax({
+                type: 'POST',
+                url: '/updatemsg/',
+                data: {'username': $('#username').val(), 'password': $('#password').val()},
+                success: function (result) {
+                    if ('1' === result) {
+                        window.alert("修改成功!");
+                    } else if ('3' === result) {
+                        window.alert("Session中没有该用户!请先登录!");
+                    } else if ('2' === result) {
+                        window.alert("无效的提交方式!");
+                    } else if ('4' === result) {
+                        window.alert("字段缺失!");
+                    } else if ('5' === result) {
+                        window.alert("密码太短了!");
+                    } else if ('6' === result) {
+                        window.alert("用户名已经被占用了!换一个吧");
+                    } else {
+                        window.alert("[debug]未知的错误!");
+                    }
+                }
+            })
+        }
+
+        {# 上传头像 #}
+
+        function uploadHead() {
+            //文件信息写入变量中
+            var form_data = new FormData();
+            var file_info = $('#file_upload')[0].files[0];
+            form_data.append('file', file_info);
+            console.log('1111');
+            //通过Ajax上传
+            $.ajax({
+                type: 'POST',
+                url: '/uploadhead/',
+                data: form_data,
+                processData: false,  // tell jquery not to process the data
+                contentType: false, // tell jquery not to set contentType
+                success: function (result) {
+                    if ('1' === result) {
+                        window.alert("上传成功!");
+                        location.reload(true);
+                    } else if ('3' === result) {
+                        window.alert("Session中没有该用户!请先登录!");
+                    } else if ('2' === result) {
+                        window.alert("无效的提交方式!");
+                    } else if ('4' === result) {
+                        window.alert("请选择要上传的图片!");
+                    } else {
+                        window.alert("[debug]未知的错误!");
+                    }
+                }
+            })
+        }
+
+        {# 删除本账户 #}
+
+        function deleteThisUser() {
+            $.ajax({
+                type: 'POST',
+                url: '/deletemsg/',
+                data: {'username': $('#username').val(), 'password': $('#password').val()},
+                success: function (result) {
+                    {# window.alert("删除成功，你走好嘞!"); #}
+                    if ('1' === result) {
+                        window.alert("删除成功，您走好嘞!");
+                        window.location.href = "http://127.0.0.1:8000/firstuse/";
+                    } else if ('3' === result) {
+                        window.alert("Session中没有该用户!请先登录!");
+                    } else {
+                        window.alert("[debug]未知的错误!");
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

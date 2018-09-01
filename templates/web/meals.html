@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{#自己用的依赖#}
+{% block own-rely %}
+    {#静态资源目录需要重新加载#}
+    {% load static %}
+    {#其它依赖#}
+    <link href="{% static "/lzh/css/meals.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{#标题#}
+{% block title %}一日三餐建议{% endblock %}
+
+{#内容部分#}
+{% block content %}
+    <div class="container">
+        <div class="cntrdiv">
+            <h2>DietCat一日三餐建议</h2>
+            <p>欢迎，根据您的情况为您提供一日三餐建议。</p>
+            <hr>
+            <h4>早餐</h4>
+            <div class="mealdiv_A">
+                <div class="picdiv">
+                    <a href="/gotomeal/{{ breakfast.id }}" target="_blank">
+                        <img src={{ breakfast.菜品图标网址 }}>
+                    </a>
+                </div>
+                <div class="txtdiv">
+                    <div class="ttlbox">
+                        <a href="/gotomeal/{{ breakfast.id }}" target="_blank">
+                            <h4 id="brkfst">{{ breakfast.商铺名称 }}-{{ breakfast.菜品 }}</h4>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="a-row">
+                        评分：
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',1);">1</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',2);">2</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',3);">3</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',4);">4</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',5);">5</button>
+                    </div>
+                </div>
+            </div>
+            {#--------------------#}
+            <hr>
+            <h4>午餐</h4>
+            <div class="mealdiv_B">
+                <div class="picdiv">
+                    <a href="/gotomeal/{{ lunch.id }}" target="_blank">
+                        <img src={{ lunch.菜品图标网址 }}>
+                    </a>
+                </div>
+                <div class="txtdiv">
+                    <div class="ttlbox">
+                        <a href="/gotomeal/{{ lunch.id }}" target="_blank">
+                            <h4 id="brkfst">{{ lunch.商铺名称 }}-{{ lunch.菜品 }}</h4>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="a-row">
+                        评分：
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',1);">1</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',2);">2</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',3);">3</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',4);">4</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',5);">5</button>
+                    </div>
+                </div>
+            </div>
+            {#--------------------#}
+            <hr>
+            <h4>晚餐</h4>
+            <div class="mealdiv_A">
+                <<div class="picdiv">
+                    <a href="/gotomeal/{{ dinner.id }}" target="_blank">
+                        <img src={{ dinner.菜品图标网址 }}>
+                    </a>
+                </div>
+                <div class="txtdiv">
+                    <div class="ttlbox">
+                        <a href="/gotomeal/{{ dinner.id }}" target="_blank">
+                            <h4 id="brkfst">{{ dinner.商铺名称 }}-{{ dinner.菜品 }}</h4>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="a-row">
+                        评分：
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',1);">1</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',2);">2</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',3);">3</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',4);">4</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',5);">5</button>
+                    </div>
+                </div>
+            </div>
+            {#--------------------#}
+            <hr>
+            <h4>小食</h4>
+            <div class="mealdiv_B">
+                <div class="picdiv">
+                    <a href="/gotomeal/{{ sneak.id }}" target="_blank">
+                        <img src={{ sneak.菜品图标网址 }}>
+                    </a>
+                </div>
+                <div class="txtdiv">
+                    <div class="ttlbox">
+                        <a href="/gotomeal/{{ sneak.id }}" target="_blank">
+                            <h4 id="brkfst">{{ sneak.商铺名称 }}-{{ sneak.菜品 }}</h4>
+                        </a>
+                    </div>
+                    <br>
+                    <div class="a-row">
+                        评分：
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',1);">1</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',2);">2</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',3);">3</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',4);">4</button>
+                        <button class="btn btn-embossed btn-sm btn-primary" onclick="subScore('brkfst',5);">5</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        {#为了用户体验,这里用ajax异步传输#}
+        {# time:用餐时段(用于获取菜名),score:对这道菜打了几分 #}
+
+        function subScore(time, score) {
+            $.ajax({
+                type: 'POST',
+                url: '/subscore/',
+                data: {'foodName': $('#' + time).text(), 'score': score},
+                success: function (result) {
+                    {#FIXME 这里需要改变按钮颜色#}
+                    if ('1' === result) {
+                        window.alert("提交成功!");
+                    } else if ('3' === result) {
+                        window.alert("Session中没有该用户!请先登录!");
+                    } else if ('2' === result) {
+                        window.alert("仅支持POST方式!")
+                    }
+                    else {
+                        window.alert("未知的错误!")
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

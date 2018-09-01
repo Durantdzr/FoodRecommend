@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{#自己用的依赖#}
+{% block own-rely %}
+    {#静态资源目录需要重新加载#}
+    {% load static %}
+    {#其它依赖#}
+    <link href="{% static "/lzh/css/punch.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{#标题#}
+{% block title %}每日打卡{% endblock %}
+
+{#内容部分#}
+{% block content %}
+    <div class="cntrdiv">
+        <h2>DietCat每日打卡</h2>
+        <p>坚持每日打卡，DietCat将做出更准确的饮食分析。修改时间可以补充打卡。</p>
+        <hr>
+        <h4>[运动/睡觉]占比</h4>
+        <form action="/punchdata/spoleep" method="post">
+            在<input name="date" type="date" value="">，
+            你运动了<input name="sporttime" type="text">小时，
+            你睡觉了<input name="sleeptime" type="text">小时。
+            <input type="submit" value="提交" class="btn btn-embossed btn-sm btn-primary">
+        </form>
+    </div>
+
+    {% include 'extern/punch_1.html' %}s
+
+    <div class="cntrdiv">
+        <hr>
+        <h4>行走步数</h4>
+        <form action="/punchdata/walk" method="post">
+            在<input name="date" type="date" value="">，
+            你走了<input name="todaystep" type="text">步。
+            <input type="submit" value="提交" class="btn btn-embossed btn-sm btn-primary">
+        </form>
+    </div>
+
+    {% include 'extern/punch_2.html' %}
+
+    <div class="cntrdiv">
+        <hr>
+        <h4>无记录打卡</h4>
+        这部分打卡不会被记录，且只能当日选择，它们会直接影响训练模型，不可修改，请谨慎选择。
+        <div class="formbox">
+            <form action="/punchdata/job" method="post">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>项目</th>
+                        <th>选定</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>有氧运动</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value="1" name="job">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>无氧运动</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value="2" name="job">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>应酬</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value="3" name="job">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>暴饮暴食</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value="4" name="job">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>吸烟</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input" value="5" name="job">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <input type="submit" value="今天我做了以上勾选的条目" class="btn btn-block btn-lg btn-primary">
+            </form>
+        </div>
+    </div>
+
+    <div class="cntrdiv">
+        <hr>
+        <h4>今日用餐情况</h4>
+        请选择您今天({{ serverDate }}日)的真实用餐情况，这可帮助DietCat更直观地分析您的饮食偏好。
+        <div class="formbox">
+            <form action="/punchdata/food" method="post">
+                早餐：<input name="breakfast" ,type="text">
+                <br>
+                午餐：<input name="lunch" ,type="text">
+                <br>
+                晚餐：<input name="dinner" ,ype="text">
+                <br><br>
+                <input type="submit" value="这是我今天的用餐情况" class="btn btn-block btn-lg btn-primary">
+            </form>
+        </div>
+    </div>
+{% endblock %}

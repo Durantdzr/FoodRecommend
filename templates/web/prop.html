@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{#自己用的依赖#}
+{% block own-rely %}
+    {#静态资源目录需要重新加载#}
+    {% load static %}
+    {#其它依赖#}
+    <link href="{% static "/lzh/css/prop.css" %}" rel="stylesheet">
+{% endblock %}
+
+
+{#标题#}
+{% block title %}用户反馈{% endblock %}
+
+{#内容部分#}
+{% block content %}
+    <div class="container">
+        <div class="cntrdiv">
+            <h2>DietCat用户反馈</h2>
+            <p>反馈您的建议、遇到的bug等将帮助改进DietCat。</p>
+            <hr>
+            {#取消了form的文本区域#}
+            <textarea id="prop">{{ discussion }}</textarea>
+            <button class="btn btn-block btn-lg btn-primary" onclick="subProp();">提交</button>
+            <button class="btn btn-block btn-lg btn-secondary" onclick="resetProp();">重置</button>
+        </div>
+    </div>
+    <script>
+        {#提交用户反馈#}
+
+        function subProp() {
+            $.ajax({
+                type: 'POST',
+                url: '/subprop/',
+                data: {'prop': $('#prop').val()},
+                success: function (result) {
+                    {#这里回调#}
+                    if ('1' === result) {
+                        window.alert("提交成功!");
+                    } else if ('2' === result) {
+                        window.alert("请先登录!");
+                    } else if ('3' == result) {
+                        window.alert("禁止的请求形式!")
+                    } else {
+                        window.alert("未知错误!")
+                    }
+                }
+            })
+        }
+
+        {# 重置文本区 #}
+
+        function resetProp() {
+            $('#prop').val('');
+        }
+    </script>
+{% endblock %}
